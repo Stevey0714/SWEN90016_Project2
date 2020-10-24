@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="../js/controller.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="../static/css/styles.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/Appointment.css">
+</head>
+<body>
+<div id="topBanner" class="Banner">
+    <div id="shopName">
+        <span>Beauty Care Service</span>
+    </div>
+    <div id="topNav">
+        <ul>
+            <li><a href="#Logout" onclick="location='/logout'">Logout</a></li>
+            <li><a href="#Username" onclick="location='/Admin'">{{ user.name }}</a></li>
+            <li><a href="#Homepage" onclick="location='/Admin'">Home Page</a></li>
+        </ul>
+    </div>
+</div>
+<div id="TB_content">
+    <div class="bigTitle">Appointments</div>
+    <div id="appointmentTables">
+        {% for appointment in appointmentList %}
+            <table>
+                <tr>
+                    <th>Name:</th>
+                    <th>{{ users_info[appointment.customer].name }}</th>
+                </tr>
+                <tr>
+                    <th>Beauty Carer:</th>
+                    <th>{{ users_info[appointment.server].name }}</th>
+                </tr>
+                <tr>
+                    <th>Date of Booking:</th>
+                    <th>{{ appointment.date }}</th>
+                </tr>
+                <tr>
+                    <th>Email Address:</th>
+                    <th>{{ users_info[appointment.customer].email }}</th>
+                </tr>
+                <tr>
+                    <th>Location:</th>
+                    <th>{{ appointment.location }}</th>
+                </tr>
+                <tr>
+                    <th>Optional Message:</th>
+                    <th>
+                        {% if appointment.message %}
+                            {{ appointment.message }}
+                        {% else %}
+                            No message
+                        {% endif %}
+                    </th>
+                </tr>
+                <tr>
+                    <th>Phone Number: </th>
+                    <th>{{ users_info[appointment.customer].contact }}</th>
+                </tr>
+                <tr>
+                    <th>Service Type: </th>
+                    <th>{{ services[appointment.service_type].name }}</th>
+                </tr>
+                <tr>
+                    <th>Time: </th>
+                    <th>{{ appointment.time }}</th>
+                </tr>
+                <tr>
+                    <th>Status: </th>
+                    <th>{{ appointment.status }}</th>
+                </tr>
+            </table>
+        {% endfor %}
+
+    </div>
+</div>
+<footer id="bottomBanner" class="Banner"></footer>
+<script type="text/javascript" src="../static/js/controller.js"></script>
+<script>
+    {#var appointmentMsg = '{{appointmentList|tojson}}'#}
+    {#//根据json数据动态生成appointment tables#}
+    {#//var appointmentMsg = '[{"Name": "Weihang Yu", "phone number": "6478618912", "email address": "ywh@gmail.com", "data of booking": "2020-10-20", "stervice type": "hair cut", "time": "19:00", "location": "1990 key street", "optional message": "no"},{"Name": "Lili Zhang", "phone number": "6478617777", "email address": "ywh@gmail.com", "data of booking": "2020-10-20", "stervice type": "hair cut", "time": "19:00", "location": "1990 key street", "optional message": "no"}]'#}
+    {#console.log(appointmentMsg)#}
+    {#Msg = JSON.parse(appointmentMsg)#}
+    {#console.log(appointmentMsg)#}
+    {#console.log(Msg)#}
+    {#const appointmentTables = document.getElementById("appointmentTables");#}
+    {#for(var tb in Msg){#}
+    {#    console.log("wtf")#}
+    {#    console.log(Msg[tb])#}
+    {#    var appointmentTable = document.createElement("table");#}
+    {#    appointmentTables.appendChild(appointmentTable)#}
+    {#    for(var item in Msg[tb]){#}
+    {#        var newNode = document.createElement("tr");#}
+    {#        var key = document.createElement("th");#}
+    {#        key.innerHTML = item;#}
+    {#        var value = document.createElement("th");#}
+    {#        value.innerHTML = Msg[tb][item];#}
+    {#        appointmentTable.appendChild(newNode);#}
+    {#        newNode.appendChild(key);#}
+    {#        newNode.appendChild(value);#}
+    {#    }#}
+    {
+    #}#}
+
+</script>
+</body>
+
+</html>

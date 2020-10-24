@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+<div id="topBanner" class="Banner">
+    <div id="shopName" class=headcontainer>
+        <text class=bigTitle><span>Beauty Care Service</span></text>
+    </div>
+    <div id="topNav">
+        <ul>
+            <li><a href="#Logout" onclick="location='/logout'">Logout</a></li>
+            <li><a href="#Username" onclick="location='/userinfo'">{{ user.name }}</a></li>
+            <li><a href="#Homepage" onclick="location='/appointment'">Home Page</a></li>
+        </ul>
+    </div>
+</div>
+<div id="content">
+    {% with message = get_flashed_messages() %}
+        {% if message %}
+            {% for msg in message %}
+                <p style="color: red;">{{ msg }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <div id="appointment" class="container">
+        <p>
+            <text class="smallTitle">Personal Information:</text>
+        </p>
+        <form action="{{ url_for('user.userinfo') }}" method="POST">
+            {{ person_form.csrf_token }}
+            <p>
+                {% if person_form.email.errors %}
+                    {% for error in person_form.email.errors %}
+                        <span style="color: red;">{{ error }}</span>
+                    {% endfor %}<br>
+                {% endif %}
+                {% if person_form.username.errors %}
+                    {% for error in person_form.username.errors %}
+                        <span style="color:red;">{{ error }}</span>
+                    {% endfor %}<br>
+                {% endif %}
+                {% if person_form.password.errors %}
+                    {% for error in person_form.password.errors %}
+                        <span style="color:red;">{{ error }}</span>
+                    {% endfor %}<br>
+                {% endif %}
+                {% if person_form.confirm_password.errors %}
+                    {% for error in person_form.confirm_password.errors %}
+                        <span style="color:red;">{{ error }}</span>
+                    {% endfor %}<br>
+                {% endif %}
+                {% if person_form.homeaddress.errors %}
+                    {% for error in person_form.homeaddress.errors %}
+                        <span style="color:red;">{{ error }}</span>
+                    {% endfor %}<br>
+                {% endif %}
+                {% if person_form.contactnumber.errors %}
+                    {% for error in person_form.contactnumber.errors %}
+                        <span style="color:red;">{{ error }}</span>
+                    {% endfor %}<br>
+                {% endif %}
+                {% if person_form.extrainfo.errors %}
+                    {% for error in person_form.extrainfo.errors %}
+                        <span style="color:red;">{{ error }}</span>
+                    {% endfor %}
+                {% endif %}
+            </p>
+            <p>
+                {{ person_form.email.label }}
+                {{ person_form.email(size=32, value=user.email) }}
+            </p>
+            <p>
+                {{ person_form.username.label }}
+                {{ person_form.username(size=32, value=user.name) }}
+            </p>
+            <p>
+                {{ person_form.password.label }}
+                {{ person_form.password(size=32) }}
+            </p>
+            <p>
+                {{ person_form.confirm_password.label }}
+                {{ person_form.confirm_password(size=32) }}
+            </p>
+            <p>
+                {{ person_form.homeaddress.label }}
+                {{ person_form.homeaddress(size=32, value=user.address) }}
+            </p>
+            <p>
+                {{ person_form.contactnumber.label }}
+                {{ person_form.contactnumber(size=32, value=user.contact) }}
+            </p>
+            <p>
+                {{ person_form.extrainfo.label }}
+                {{ person_form.extrainfo(size=32, value=user.extra_info) }}
+            </p>
+            <p>
+                {{ person_form.submit(size=32, class="s-button") }}
+            </p>
+        </form>
+    </div>
+    <div id="appointment" class="container">
+        <text class="smallTitle">Biller Information:</text>
+        <!--这里要叠多个-->
+        <div id="appointment" class="billercontainer">
+            <button type="button" onclick='addBiller()' class="s-button" id="add_button">Add</button>
+            <button type="button" onclick="deleteBiller()" class="s-button">Remove</button>
+            {% if current_biller %}
+                {% for bill in current_biller %}
+                    <form action="{{ url_for('user.userinfo') }}" method="post" class="biller"
+                          id="{{ "biller" + loop.index|string }}">
+                        <input type="hidden" name='old_name' value="{{ bill.ID }}"><br>
+                        <label for="name">Name: </label>
+                        <input type="text" name="name" value="{{ bill.name }}" required><br>
+                        <label for="email">Email: </label>
+                        <input type="text" name="email" value="{{ bill.email }}" required><br>
+                        <input class="s-button" type="submit" value="Update" name="update">
+                        <input class="s-button" type="submit"
+                               onclick="return confirm('Do you really want to delete this biller information?')"
+                               value="Delete" name="delete">
+                    </form>
+                {% endfor %}
+            {% else %}
+                <form action="{{ url_for('user.userinfo') }}" method="post"
+                      class="biller" id="biller1">
+                    <p>You don't have any biller information yet.</p>
+                    <p>Please add one first!</p>
+                    <input type="hidden" name='old_name' value="">
+                    <label for="name">Name: </label>
+                    <input type="text" name="name" value="" required><br><br>
+                    <label for="email">Email: </label>
+                    <input type="text" name="email" value="" required><br>
+                    <input class="s-button" type="submit" value="Update"
+                           name="update">
+                    <input class="s-button" type="submit" value="Delete"
+                           name="delete" onclick="return confirm('Do you really want to delete this biller information?')">
+                </form>
+            {% endif %}
+            <span id="anchor" style="visibility: hidden;">Bottom of the form</span>
+        </div>
+    </div>
+</div>
+
+<div id="bottomBanner" class="Banner"></div>
+<script>
+    function addBiller() {
+        var current_biller = document.getElementsByClassName('biller').length;
+        var elem = document.querySelector('#biller1');
+        var copy = elem.cloneNode(true);
+        var anchor = document.getElementById('anchor');
+        copy.id = 'biller' + (current_biller + 1).toString();
+        for (var i = 0; i < copy.childNodes.length; i++) {
+            var e = copy.childNodes[i];
+            if (e.tagName) switch (e.tagName.toLowerCase()) {
+                case 'input':
+                    switch (e.type) {
+                        case "radio":
+                        case "checkbox":
+                            e.checked = false;
+                            break;
+                        case "button":
+                        case "submit":
+                        case "image":
+                            break;
+                        case "files":
+                            e.files;
+                            break;
+                        default:
+                            e.value = '';
+                            break;
+                    }
+                    break;
+                case 'p':
+                    e.innerHTML = "";
+                    break;
+                default:
+            }
+            anchor.before(copy);
+        }
+    }
+
+    function deleteBiller() {
+        var current_biller = document.getElementsByClassName('biller');
+        var target = current_biller[current_biller.length - 1];
+        if (current_biller.length === Math.max({{ current_biller|length }}, 1)) {
+            alert('No more cells can be deleted')
+        } else {
+            target.remove();
+        }
+    }
+
+</script>
+</body>
+</html>

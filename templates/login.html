@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+<div id="topBanner" class="Banner">
+    <div id="shopName" class=headcontainer>
+        <text class=bigTitle><span>Beauty Care Service</span></text>
+    </div>
+    <div id="topNav">
+        <ul>
+            <li><a href="#Register" onclick="location='/register'">Register</a></li>
+            <li><a href="#Login" onclick="location='/login'">Login</a></li>
+            <li><a href="#Homepage" onclick="location='/'">Home Page</a></li>
+        </ul>
+    </div>
+</div>
+<div id="content">
+    <div class='textcontainer-C'>
+        <form action="{{ url_for("user.login") }}" method="POST">
+            {{ form.csrf_token }}
+            <h1>Login</h1>
+            {% with message = get_flashed_messages() %}
+                {% if message %}
+                    {% for msg in message %}
+                        <p style="color: red;">{{ msg }}</p>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <p>
+                {% if form.username.errors %}
+                    {% for error in form.username.errors %}
+                        <span style="color: red;">{{ error }}</span>
+                    {% endfor %}<br>
+                {% endif %}
+                {% if form.password.errors %}
+                    {% for error in form.password.errors %}
+                        <span style="color: red;">{{ error }}</span>
+                    {% endfor %}<br>
+                {% endif %}
+            <p>
+                {{ form.username.label }}
+                {{ form.username(size=32) }}
+            </p>
+            <p>
+                {{ form.password.label }}
+                {{ form.password(size=32) }}
+            </p>
+            <p>
+                {{ form.submit(class='s-button') }}
+            </p>
+        </form>
+    </div>
+</div>
+<div id="bottomBanner" class="Banner"></div>
+</body>
+</html>

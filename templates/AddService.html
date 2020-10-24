@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="../js/controller.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="../static/css/styles.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/AddService.css">
+</head>
+<body>
+<div id="topBanner" class="Banner">
+    <div id="shopName">
+        <span>Beauty Care Service</span>
+    </div>
+    <div id="topNav">
+        <ul>
+            <li><a href="#Logout" onclick="location='/logout'">Logout</a></li>
+            <li><a href="#Username" onclick="location='/Admin'">{{ user.name }}</a></li>
+            <li><a href="#Homepage" onclick="location='/Admin'">Home Page</a></li>
+        </ul>
+    </div>
+</div>
+<div id="FormContent">
+    <div class="bigTitle">Add New Service</div>
+    <form action="{{ url_for('admin.add_service') }}" method="POST">
+        <p style="max-width: 1200px; margin: 0 auto;">
+            {% with message = get_flashed_messages() %}
+                {% if message %}
+                    {% for msg in message %}
+                        <p style="color: red;">{{ msg }}</p>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </p>
+        <label for="serviceType" style="font-size: 22px; margin: 5px">Service Type</label>
+        <input type="text" name="type" id="serviceType" placeholder="Service Type">
+        <label for="chargeAmount" style="font-size: 22px; margin: 5px">Charge per Hour</label>
+        <input type="text" name="charge" id="chargeAmount"
+               placeholder="$40">
+        <input type="submit" value="Submit">
+    </form>
+</div>
+<footer id="bottomBanner" class="Banner"></footer>
+<script type="text/javascript" src="../static/js/controller.js"></script>
+<script>
+
+    {#var newService = document.createElement("div");#}
+    {#newService.innerHTML = "Add New Service";#}
+    {#newService.id = "newService"#}
+    {#services.appendChild(newService)#}
+    {#newService.onclick= function (){window.location.href="/Appointment"}#}
+
+
+</script>
+</body>
+
+</html>

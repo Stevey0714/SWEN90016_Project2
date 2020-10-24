@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    {#    <link rel="stylesheet" type="text/css" href="../static/css/styles.css">#}
+</head>
+<body>
+<div id="topBanner" class="Banner">
+    <div id="shopName" class=headcontainer>
+        <text class=bigTitle><span>Beauty Care Service</span></text>
+    </div>
+    <div id="topNav">
+        <ul>
+            <li><a href="#Register" onclick="location='/register'">Register</a></li>
+            <li><a href="#Login" onclick="location='/login'">Login</a></li>
+            <li><a href="#Homepage" onclick="location='/'">Home Page</a></li>
+        </ul>
+    </div>
+</div>
+<div id="content">
+    <div id="appointment" class='textcontainer-C'>
+        <form action="{{ url_for('user.register') }}" method="POST">
+            {{ form.csrf_token }}
+            {% with message = get_flashed_messages() %}
+                {% if message %}
+                    {% for msg in message %}
+                        <p style="color: red;">{{ msg }}</p>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <p>
+                {% if form.email.errors %}
+                    {% for error in form.email.errors %}
+                        <span style="color: red;">{{ error }}</span>
+                    {% endfor %}<br>
+                {% endif %}
+                {% if form.username.errors %}
+                    {% for error in form.username.errors %}
+                        <span style="color:red;">{{ error }}</span>
+                    {% endfor %}<br>
+                {% endif %}
+                {% if form.password.errors %}
+                    {% for error in form.password.errors %}
+                        <span style="color:red;">{{ error }}</span>
+                    {% endfor %}<br>
+                {% endif %}
+                {% if form.confirm_password.errors %}
+                    {% for error in form.confirm_password.errors %}
+                        <span style="color:red;">{{ error }}</span>
+                    {% endfor %}<br>
+                {% endif %}
+                {% if form.homeaddress.errors %}
+                    {% for error in form.homeaddress.errors %}
+                        <span style="color:red;">{{ error }}</span>
+                    {% endfor %}<br>
+                {% endif %}
+                {% if form.contactnumber.errors %}
+                    {% for error in form.contactnumber.errors %}
+                        <span style="color:red;">{{ error }}</span>
+                    {% endfor %}<br>
+                {% endif %}
+                {% if form.extrainfo.errors %}
+                    {% for error in form.extrainfo.errors %}
+                        <span style="color:red;">{{ error }}</span>
+                    {% endfor %}
+                {% endif %}
+            </p>
+            <p>
+                {{ form.email.label }}
+                {{ form.email(size=32) }}
+            </p>
+            <p>
+                {{ form.username.label }}
+                {{ form.username(size=32) }}
+            </p>
+            <p>
+                {{ form.password.label }}
+                {{ form.password(size=32) }}
+            </p>
+            <p>
+                {{ form.confirm_password.label }}
+                {{ form.confirm_password(size=32) }}
+            </p>
+            <p>
+                {{ form.homeaddress.label }}
+                {{ form.homeaddress(size=32) }}
+            </p>
+            <p>
+                {{ form.contactnumber.label }}
+                {{ form.contactnumber(size=32) }}
+            </p>
+            <p>
+                {{ form.extrainfo.label }}
+                {{ form.extrainfo(size=32) }}
+            </p>
+            <p>
+                {{ form.submit(size=32, class='s-button') }}
+            </p>
+        </form>
+    </div>
+</div>
+<div id="bottomBanner" class="Banner"></div>
+</body>
+</html>

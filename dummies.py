@@ -1,5 +1,5 @@
 from app.extensions import db
-from app.models import User
+from app.models import User, Service, Role
 from faker import Faker
 
 fake = Faker()
@@ -20,3 +20,9 @@ def fake_user(count=10):
         user.set_password('123456789')
         db.session.add(user)
         db.session.commit()
+
+def add_service(service_name, rate):
+    admin = User.query.filter_by(role_id=3).first()
+    new_service = Service(name=service_name, rate=rate, add_by=admin.ID)
+    db.session.add(new_service)
+    db.session.commit()

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+<div id="topBanner" class="Banner">
+    <div id="shopName" class=headcontainer>
+        <text class=bigTitle><span>Beauty Care Service</span></text>
+    </div>
+    <div id="topNav">
+        <ul>
+            <li><a href="#Logout" onclick="location='/logout'">Logout</a></li>
+            <li><a href="#Username" onclick="location='/userinfo'">{{ user }}</a></li>
+            <li><a href="#Homepage" onclick="location='/appointment'">Home Page</a></li>
+        </ul>
+    </div>
+</div>
+<div id="content">
+    <p style="max-width: 1200px; margin: 0 auto;">
+        {% with message = get_flashed_messages() %}
+            {% if message %}
+                {% for msg in message %}
+                    <p style="color: red;">{{ msg }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </p>
+    <div id="appointment" class=container>
+        <br/>
+        <div class="smallTitle">Book Appointments</div>
+        <button class="button" onclick="location='/book'">Click Me</button>
+    </div>
+    <div id="service" class=container>
+        <br/>
+        <div class="smallTitle">Booked Appointments</div>
+        <button class="button" onclick="location='/booked'">Click Me</button>
+    </div>
+</div>
+<div id="bottomBanner" class="Banner"></div>
+</body>
+</html>

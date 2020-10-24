@@ -18,12 +18,12 @@ def permission_required(permission):
 
 
 def admin_required(f):
-    return permission_required(Permission.ADD_SERVICE)
+    return permission_required(Permission.ADD_SERVICE)(f)
 
 
 def carer_required(f):
-    return permission_required(Permission.VIEW_ORDER)
+    return permission_required(Permission.VIEW_ORDER)(f)
 
 
 def user_required(f):
-    return permission_required(Permission.ORDER)
+    return permission_required(Permission.ORDER)(f)

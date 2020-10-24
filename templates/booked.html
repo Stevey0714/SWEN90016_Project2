@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/styles.css">
+</head>
+<body>
+<div id="topBanner" class="Banner">
+    <div id="shopName" class=headcontainer>
+        <text class=bigTitle><span>Beauty Care Service</span></text>
+    </div>
+    <div id="topNav">
+        <ul>
+            <li><a href="#Logout" onclick="location='/logout'">Logout</a></li>
+            <li><a href="#Username" onclick="location='/userinfo'">{{ user.name }}</a></li>
+            <li><a href="#Homepage" onclick="location='/appointment'">Home Page</a></li>
+        </ul>
+    </div>
+</div>
+<!--这里要叠多个-->
+<div id="content">
+    <p style="max-width: 1200px; margin: 0 auto;">
+        {% with message = get_flashed_messages() %}
+            {% if message %}
+                {% for msg in message %}
+                    <p style="color: red;">{{ msg }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </p>
+    <div id="appointment" class='billercontainer'
+         style="display: flex; justify-content: space-around; flex-wrap: wrap;">
+        {% if appointments %}
+            {% for appointment in appointments %}
+                <form action="{{ url_for('user.booked') }}" method="post"
+                      onsubmit="return confirm('Cancellation is irrecoverable, do you really want to cancel your appointment?')">
+                    <br>
+                    <input type="hidden" name="app_ID" value="{{ appointment.ID }}">
+                    <p>Appointment{{ loop.index|string }}</p>
+                    <p>Service Type: {{ service_name[appointment.service_type] }}</p>
+                    <p>Service Time: {{ appointment.date + ' ' + appointment.time }}</p>
+                    <input type="button" onclick="location='{{ url_for('user.viewaptmt', app_ID=appointment.ID) }}'"
+                           value='View' name='view' class="s-button">
+                    <input type="submit" value="Cancel" name="cancel" class="s-button">
+                </form>
+            {% endfor %}
+        {% else %}
+            <div style="text-align: center;">
+                <p>You currently have no appointment with us!</p><br>
+                <p>Please click the button below to book an appointment with us first!</p><br>
+                <a href="{{ url_for('user.book') }}">
+                    <button class="button">Book Appointment</button>
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+<div id="bottomBanner" class="Banner"></div>
+</body>
+</html>

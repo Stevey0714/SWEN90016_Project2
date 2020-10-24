@@ -1,26 +1,56 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import DataRequired, ValidationError, EqualTo
+from wtforms.validators import DataRequired, ValidationError, EqualTo, Email
 from .models import User
 
 
 class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    remember_me = BooleanField("Remembers Me")
+    # 域初始化时，第一个参数是设置label属性的
+    username = StringField('User Name: ', validators=[DataRequired()])
+    password = PasswordField('Password: ', validators=[DataRequired()])
     submit = SubmitField('Login')
 
 
-class RegistrationForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    password2 = PasswordField('Please enter again', validators=[DataRequired(), EqualTo('password')])
-    contact = StringField('Contact', validatiors=[DataRequired()])
-    address = StringField('Address', validators=[DataRequired()])
-    extra_id = StringField('Extra Information')
-    submit = SubmitField('Register')
+class RegisterForm(FlaskForm):
+    email = StringField('Email Address: ', validators=[DataRequired(), Email()])
+    username = StringField('User Name: ', validators=[DataRequired()])
+    password = PasswordField('Password: ', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password: ', validators=[DataRequired(), EqualTo('password')])
+    homeaddress = StringField('Home Address: ', validators=[DataRequired()])
+    contactnumber = StringField('Contact Number: ', validators=[DataRequired()])
+    extrainfo = StringField('Extra Info: ', validators=[])
+    submit = SubmitField('Register Now')
 
     def validate_username(self, username):
-        user = User.query.filter_by(username=username.data).first()
+        user = User.query.filter_by(name=username.data).first()
         if user is not None:
-            raise ValidationError("Username has already been registered, please choose another name.")
+            # raise ValidationError("Username has already been registered, please choose another name.")
+            return False
+        else:
+            return True
+
+class BookForm(FlaskForm):
+    username = StringField('User Name', validators=[DataRequired()])
+    servicetype = StringField('Service Type', validators=[DataRequired()])
+    date = StringField('Date', validators=[DataRequired()])
+    time = StringField('Time', validators=[DataRequired()])
+    location = StringField('Location', validators=[DataRequired()])
+    optionalmassage = StringField('Optional Massage', validators=[DataRequired()])
+
+class UpdatePersonForm(FlaskForm):
+    email = StringField('Email Address: ', validators=[Email()])
+    username = StringField('User Name: ', validators=[])
+    password = PasswordField('Password: ', validators=[])
+    confirm_password = PasswordField('Confirm Password: ', validators=[EqualTo('password')])
+    homeaddress = StringField('Home Address: ', validators=[])
+    contactnumber = StringField('Contact Number: ', validators=[])
+    extrainfo = StringField('Extra Info: ', validators=[])
+    submit = SubmitField('Update')
+
+    def validate_username(self, username):
+        user = User.query.filter_by(name=username.data).first()
+        if user is not None:
+            # raise ValidationError("Username has already been registered, please choose another name.")
+            return False
+        else:
+            return True

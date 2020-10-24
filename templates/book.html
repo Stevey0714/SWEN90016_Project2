@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/styles.css">
+</head>
+<body>
+<div id="topBanner" class="Banner">
+    <div id="shopName" class=headcontainer>
+        <text class=bigTitle><span>Beauty Care Service</span></text>
+    </div>
+    <div id="topNav">
+        <ul>
+            <li><a href="#Logout" onclick="location='/logout'">Logout</a></li>
+            <li><a href="#Username" onclick="location='/userinfo'">{{ user.name }}</a></li>
+            <li><a href="#Homepage" onclick="location='/appointment'">Home Page</a></li>
+        </ul>
+    </div>
+</div>
+<div id="content">
+    <p style="max-width: 1200px; margin: 0 auto;">
+        {% with message = get_flashed_messages() %}
+            {% if message %}
+                {% for msg in message %}
+                    <p style="color: red;">{{ msg }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </p>
+    <div id="appointment" class=textcontainer-C>
+        <form action="{{ url_for("user.book") }}" method="POST">
+            <br><br>
+            <label for="servicetype">Service Type:</label>
+            <select name="servicetype" size=1/>
+                {% for service in services %}
+                    {% if service == expensive_service %}
+                        <option value="{{ service.name }}" selected="selected">{{ service.name }}</option>
+                    {% else %}
+                        <option value="{{ service.name }}">{{ service.name }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <br><br>
+            <label for="date">Select Date (DD/MM/YYYY):</label>
+            <input type="date" name="date" id="appointment_date" onchange="updateTime()" required/>
+            <br><br>
+            <label for="time">Select Time:</label>
+            <select name="time" id="appointment_time" size=1 required>
+                <option value="Nothing">Please selected a date</option>
+            </select>
+            <br><br>
+            <label for="location">Location:</label>
+            <input type="text" name="location" value="{{ user.address }}"required/>
+            <br><br>
+            <label for="optionalmessage">Optional Message:</label>
+            <input type="text" name="optionalmessage"/>
+            <br><br>
+            <button type='submit' class="button">Submit</button>
+
+        </form>
+    </div>
+</div>
+<div id="bottomBanner" class="Banner"></div>
+<script>
+    function updateTime() {
+        var date = document.getElementById('appointment_date').value;
+        var time = document.getElementById('appointment_time');
+        var available_time = ['09:00', '10:00', '11:00', '12:00', '13:00',
+            '14:00', '15:00', '16:00'];
+        var booked_time = {
+            {% if booked_times %}
+                {% for date, times in booked_times.items() %}
+                    '{{ date }}': [
+                        {% for time in times %}
+                            '{{ time }}',
+                        {% endfor %}
+                    ],
+                {% endfor %}
+            {% endif %}
+        };
+        var options = '';
+        if (!(Object.keys(booked_time).length === 0)) {
+            if (Object.keys(booked_time).includes(date)) {
+                for (var time_slot of available_time) {
+                    if (!booked_time[date].includes(time_slot)) {
+                        options += '<option value="' + time_slot + '">' + time_slot + "</option>"
+                    }
+                }
+                if (options === '') {
+                    options += '<option value="Nothing"> No time available</option>'
+                }
+            } else {
+                for (var time_slot of available_time) {
+                    options += '<option value="' + time_slot + '">' + time_slot + "</option>"
+                }
+            }
+        } else {
+            for (var time_slot of available_time) {
+                options += '<option value="' + time_slot + '">' + time_slot + "</option>"
+            }
+        }
+        time.innerHTML = options;
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+<div id="topBanner" class="Banner">
+    <div id="shopName">
+        <span>Beauty Care Service</span>
+    </div>
+    <div id="topNav">
+        <ul>
+            {% if user.name  == 'Guest User' %}
+                <li><a href="#Register" onclick="location='/register'">Register</a></li>
+                <li><a href="#Login" onclick="location='/login'">Login</a></li>
+                <li><a href="#Homepage" onclick="location='/'">Home Page</a></li>
+            {% else %}
+                <li><a href="#Logout" onclick="location='/logout'">Logout</a></li>
+                <li><a href="#Username" onclick="location='/userinfo'">{{ user.name }}</a></li>
+                <li><a href="#Homepage" onclick="location='/appointment'">Home Page</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+<div id="content">
+    <div class=bigTitle>Welcome to Beauty Care Service</div>
+</div>
+<div id="bottomBanner" class="Banner"></div>
+</body>
+</html>

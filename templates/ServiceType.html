@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="../static/js/controller.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="../static/css/styles.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/ServiceType.css">
+</head>
+<body>
+<div id="topBanner" class="Banner">
+    <div id="shopName">
+        <span>Beauty Care Service</span>
+    </div>
+    <div id="topNav">
+        <ul>
+            <li><a href="#Logout" onclick="location='/logout'">Logout</a></li>
+            <li><a href="#Username" onclick="location='/Admin'">{{ user.name }}</a></li>
+            <li><a href="#Homepage" onclick="location='/Admin'">Home Page</a></li>
+        </ul>
+    </div>
+</div>
+<div id="TB_content">
+    <p style="max-width: 1200px; margin: 0 auto;">
+        {% with message = get_flashed_messages() %}
+            {% if message %}
+                {% for msg in message %}
+                    <p style="color: red;">{{ msg }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </p>
+    <div class="bigTitle">Service Types</div>
+    <table id="serviceTypes">
+        {% for service in services %}
+            <tr>
+                <th>{{ service.name }}: ${{ service.rate }}/per hour</th>
+            </tr>
+        {% endfor %}
+        <tr>
+            <th style="text-align: center;">
+                <a href="{{ url_for('admin.add_service') }}">
+                    <button class="button">Add Service</button>
+                </a>
+            </th>
+        </tr>
+    </table>
+</div>
+<footer id="bottomBanner" class="Banner"></footer>
+<script>
+    {#var serviceMsg = '{{serviceList|tojson}}'#}
+    {#//根据json数据动态生成service type tables#}
+    {#Msg = JSON.parse(serviceMsg)#}
+    {#console.log(serviceMsg)#}
+    {#console.log(Msg)#}
+    {#const services = document.getElementById("serviceTypes");#}
+    {#for(var item in Msg){#}
+    {#    var newNode = document.createElement("tr");#}
+    {#    var entry = document.createElement("th");#}
+    {#    entry.innerHTML = Msg[item];#}
+    {#    services.appendChild(newNode);#}
+    {#    newNode.appendChild(entry);#}
+    {
+    #}#}
+    {#var newService = document.createElement("div");#}
+    {#newService.innerHTML = "Add New Service";#}
+    {#newService.id = "newService"#}
+    {#services.appendChild(newService)#}
+    {#newService.onclick= function (){window.location.href="/AddService"}#}
+
+
+</script>
+</body>
+
+</html>

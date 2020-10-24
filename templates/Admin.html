@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/styles.css">
+</head>
+<body>
+    <div id="topBanner" class="Banner">
+        <div id = "shopName">
+            <span>Beauty Care Service</span>
+        </div>
+        <div id = "topNav">
+            <ul>
+            <li><a href="#Logout" onclick="location='/logout'">Logout</a></li>
+            <li><a href="#Username" onclick="location='/Admin'">{{ user.name }}</a></li>
+            <li><a href="#Homepage" onclick="location='/Admin'">Home Page</a></li>
+            </ul>
+        </div>
+    </div>
+    <div id = "content">
+        <div id = "appointment" class = container>
+            <div class = bigTitle>All Appointments</div>
+            <button class="button">Click Me</button>
+        </div>
+        <div id = "service" class = container>
+            <div class = bigTitle>Service Types</div>
+            <button class="button">Click Me</button>
+        </div>
+    </div>
+    <footer id="bottomBanner" class="Banner"></footer>
+</body>
+<script type="text/javascript" src="../static/js/controller.js"></script>
+<script>
+    var appointment = document.getElementById("appointment");
+    appointment.onclick = function () {
+        window.location.href="{{ url_for('admin.appointment_admin') }}"
+    }
+    var servicetype = document.getElementById("service");
+    servicetype.onclick= function () {
+        window.location.href = "/ServiceType"
+    }
+
+</script>
+</html>

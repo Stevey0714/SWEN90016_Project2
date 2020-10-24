@@ -11,12 +11,13 @@ def load_user(id):
     return User.query.get(int(id))
 
 
-login_manager.login_view = ''  # 此处输入登陆界面的地址 e.g. admin.login
+login_manager.login_view = 'user.login'  # 此处输入登陆界面的地址 e.g. admin.login
+login_manager.session_protection = 'strong'
 login_manager.login_message_category = 'warning'
 
 
 class AnonymousUser(AnonymousUserMixin):
-    username = 'Anonymous'
+    name = 'Guest User'
     role = ''
 
     def can(self, permissions):
