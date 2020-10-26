@@ -3,6 +3,9 @@ from flask import current_app
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
+'''
+Different forms for database
+'''
 
 class Role(db.Model):
     __tablename__ = 'Role'
@@ -45,8 +48,8 @@ class Bill(db.Model):
 
     user = db.relationship('User', back_populates='bill')
 
-    def __repr__(self):
-        return f"<{User.name}'s bill information: Biller Name: {self.name} \t E-mail: {self.email}>"
+    # def __repr__(self):
+    #     return f"<{User.name}'s bill information: Biller Name: {self.name} \t E-mail: {self.email}>"
 
     # 输入用户ID，返回该用户所有的Bill Information
     def get_bill_info(self, ID):
@@ -63,8 +66,8 @@ class Service(db.Model):
     user = db.relationship('User', back_populates='service')
     appointment = db.relationship('Appointment', back_populates='service')
 
-    def __repr__(self):
-        return f'<{self.name}, charges {self.rate} per hour>'
+    # def __repr__(self):
+    #     return f'<{self.name}, charges {self.rate} per hour>'
 
     # 输入服务名称，返回该服务的信息
     def get_rate(self, service):
@@ -116,8 +119,8 @@ class User(UserMixin, db.Model):
             else:
                 self.role = Role.query.filter_by(default=True).first()
 
-    def __repr__(self):
-        return f'<User {self.name}'
+    # def __repr__(self):
+    #     return f'<User {self.name}'
 
     def get_id(self):
         return str(self.ID)
