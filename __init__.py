@@ -4,10 +4,10 @@ from app.blueprints.admin import admin_bp
 from app.blueprints.users import user_bp
 import click
 from app.models import Role
-from app.dummies import fake_admin, fake_user
+from app.dummies import fake_admin, fake_user, add_service
 from flask import Flask
 
-
+# Registering blueprints and system configs
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
@@ -26,7 +26,7 @@ def register_extensions(app):
     db.init_app(app)
     login_manager.init_app(app)
 
-
+# add terminal commands for simple manipulations
 def register_commands(app):
     @app.cli.command()
     @click.option('--drop', is_flag=True, help='Drop before create.')
@@ -53,7 +53,7 @@ def register_commands(app):
 
         click.echo('Done.')
 
-
+# register dummy users for testing
 def register_dummies(app, drop=False):
     if drop:
         click.echo('Dropping tables...')
@@ -67,6 +67,10 @@ def register_dummies(app, drop=False):
     fake_admin()
     click.echo('Generating user...')
     fake_user()
+    click.echo('Initializing service...')
+    add_service('haircut', 10.00)
+    add_service('hair wash & dry', 20.00)
+    add_service('hair color', 40.00)
     click.echo('Done')
 
 
