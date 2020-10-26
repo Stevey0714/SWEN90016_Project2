@@ -5,6 +5,7 @@
     <title>Title</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
     {#    <link rel="stylesheet" type="text/css" href="../static/css/styles.css">#}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/register.css') }}">
 </head>
 <body>
 <div id="topBanner" class="Banner">
@@ -19,7 +20,7 @@
         </ul>
     </div>
 </div>
-<div id="content">
+<div id="FormContent">
     <div id="appointment" class='textcontainer-C'>
         <form action="{{ url_for('user.register') }}" method="POST">
             {{ form.csrf_token }}
@@ -67,6 +68,7 @@
                     {% endfor %}
                 {% endif %}
             </p>
+            <div style="float: left; width: 50%">
             <p>
                 {{ form.email.label }}
                 {{ form.email(size=32) }}
@@ -83,6 +85,8 @@
                 {{ form.confirm_password.label }}
                 {{ form.confirm_password(size=32) }}
             </p>
+            </div>
+            <div style="float: right; width: 50%">
             <p>
                 {{ form.homeaddress.label }}
                 {{ form.homeaddress(size=32) }}
@@ -95,9 +99,11 @@
                 {{ form.extrainfo.label }}
                 {{ form.extrainfo(size=32) }}
             </p>
-            <p>
+
+            <p style="padding-top: 16px; padding-left: 45px; width: 100%">
                 {{ form.submit(size=32, class='s-button') }}
             </p>
+            </div>
         </form>
     </div>
 </div>

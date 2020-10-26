@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script type="text/javascript" src="../js/controller.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="../static/css/styles.css">
-    <link rel="stylesheet" type="text/css" href="../static/css/Appointment.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/Appointment.css') }}">
 </head>
 <body>
 <div id="topBanner" class="Banner">
@@ -21,7 +20,7 @@
         </ul>
     </div>
 </div>
-<div id="TB_content">
+<div id="FormContent">
     <div class="bigTitle">Appointments</div>
     <div id="appointmentTables">
         {% for appointment in appointmentList %}
@@ -108,5 +107,5 @@
 
 </script>
 </body>
-
+<script type="text/javascript" src="../static/js/controller.js"></script>
 </html>

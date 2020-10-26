@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script type="text/javascript" src="../js/controller.js"></script>
-
-    <link rel="stylesheet" type="text/css" href="../static/css/styles.css">
-    <link rel="stylesheet" type="text/css" href="../static/css/AddService.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/AddService.css') }}">
 </head>
 <body>
 <div id="topBanner" class="Banner">
@@ -24,20 +22,18 @@
 <div id="FormContent">
     <div class="bigTitle">Add New Service</div>
     <form action="{{ url_for('admin.add_service') }}" method="POST">
-        <p style="max-width: 1200px; margin: 0 auto;">
-            {% with message = get_flashed_messages() %}
-                {% if message %}
-                    {% for msg in message %}
-                        <p style="color: red;">{{ msg }}</p>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-        </p>
+        {% with message = get_flashed_messages() %}
+            {% if message %}
+                {% for msg in message %}
+                    <p style="color: red;">{{ msg }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
         <label for="serviceType" style="font-size: 22px; margin: 5px">Service Type</label>
         <input type="text" name="type" id="serviceType" placeholder="Service Type">
         <label for="chargeAmount" style="font-size: 22px; margin: 5px">Charge per Hour</label>
         <input type="text" name="charge" id="chargeAmount"
-               placeholder="$40">
+               placeholder="e.g. $40">
         <input type="submit" value="Submit">
     </form>
 </div>
@@ -54,5 +50,5 @@
 
 </script>
 </body>
-
+<script type="text/javascript" src="../static/js/controller.js"></script>
 </html>

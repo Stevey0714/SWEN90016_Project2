@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/userinfo.css') }}">
 </head>
 <body>
 <div id="topBanner" class="Banner">
@@ -18,18 +19,26 @@
         </ul>
     </div>
 </div>
-<div id="content">
+
+<div id="FormContent">
     {% with message = get_flashed_messages() %}
         {% if message %}
             {% for msg in message %}
-                <p style="color: red;">{{ msg }}</p>
+                <p align="center" style="color: red;">{{ msg }}</p>
             {% endfor %}
         {% endif %}
     {% endwith %}
-    <div id="appointment" class="container">
+    <div id="PersonalInfo" class="container" style="float: left">
         <p>
-            <text class="smallTitle">Personal Information:</text>
+            <text class="bigTitle">Personal Information:</text>
         </p>
+        <!--        {% with message = get_flashed_messages() %}-->
+            <!--            {% if message %}-->
+                <!--                {% for msg in message %}-->
+                    <!--                    <p style="color: red;">{{ msg }}</p>-->
+                    <!--                {% endfor %}-->
+                <!--            {% endif %}-->
+            <!--        {% endwith %}-->
         <form action="{{ url_for('user.userinfo') }}" method="POST">
             {{ person_form.csrf_token }}
             <p>
@@ -102,43 +111,51 @@
             </p>
         </form>
     </div>
-    <div id="appointment" class="container">
-        <text class="smallTitle">Biller Information:</text>
+    <div id="BillerInfo" class="container" style="float: right">
+        <p>
+            <text class="bigTitle">Biller Information:</text>
+        </p>
         <!--这里要叠多个-->
-        <div id="appointment" class="billercontainer">
-            <button type="button" onclick='addBiller()' class="s-button" id="add_button">Add</button>
-            <button type="button" onclick="deleteBiller()" class="s-button">Remove</button>
-            {% if current_biller %}
-                {% for bill in current_biller %}
-                    <form action="{{ url_for('user.userinfo') }}" method="post" class="biller"
-                          id="{{ "biller" + loop.index|string }}">
-                        <input type="hidden" name='old_name' value="{{ bill.ID }}"><br>
+        <div class="BillerContainer">
+            <div>
+                <button type="button" onclick='addBiller()' class="s-button" id="add_button">Add</button>
+                <button type="button" onclick="deleteBiller()" class="de-button">Remove</button>
+            </div>
+            <div>
+                {% if current_biller %}
+                    </div>
+                    {% for bill in current_biller %}
+                        <form action="{{ url_for('user.userinfo') }}" method="post" class="biller"
+                              id="{{ "biller" + loop.index|string }}">
+                            <input type="hidden" name='old_name' value="{{ bill.ID }}"><br>
+                            <label for="name">Name: </label>
+                            <input type="text" name="name" value="{{ bill.name }}"><br>
+                            <label for="email">Email: </label>
+                            <input type="text" name="email" value="{{ bill.email }}"><br>
+                            <div style="width: 70%">
+                                <input class="s-button" type="submit" value="Update" name="update">
+                                <input class="de-button" type="submit"
+                                       onclick="return confirm('Do you really want to delete this biller information?')"
+                                       value="Delete" name="delete">
+                            </div>
+                        </form>
+                    {% endfor %}
+                {% else %}
+                    <form action="{{ url_for('user.userinfo') }}" method="post" class="biller" id="biller1">
+                        <p style="color: red">You don't have any biller information yet. Please add one first!</p>
+                        <input type="hidden" name='old_name' value="">
                         <label for="name">Name: </label>
-                        <input type="text" name="name" value="{{ bill.name }}" required><br>
+                        <input type="text" name="name" value=""><br>
                         <label for="email">Email: </label>
-                        <input type="text" name="email" value="{{ bill.email }}" required><br>
-                        <input class="s-button" type="submit" value="Update" name="update">
-                        <input class="s-button" type="submit"
-                               onclick="return confirm('Do you really want to delete this biller information?')"
-                               value="Delete" name="delete">
+                        <input type="text" name="email" value=""><br>
+                        <div style="width: 70%">
+                            <input class="s-button" type="submit" value="Update" name="update">
+                            <input class="de-button" type="submit"
+                                   onclick="return confirm('Do you really want to delete this biller information?')"
+                                   value="Delete" name="delete">
+                        </div>
                     </form>
-                {% endfor %}
-            {% else %}
-                <form action="{{ url_for('user.userinfo') }}" method="post"
-                      class="biller" id="biller1">
-                    <p>You don't have any biller information yet.</p>
-                    <p>Please add one first!</p>
-                    <input type="hidden" name='old_name' value="">
-                    <label for="name">Name: </label>
-                    <input type="text" name="name" value="" required><br><br>
-                    <label for="email">Email: </label>
-                    <input type="text" name="email" value="" required><br>
-                    <input class="s-button" type="submit" value="Update"
-                           name="update">
-                    <input class="s-button" type="submit" value="Delete"
-                           name="delete" onclick="return confirm('Do you really want to delete this biller information?')">
-                </form>
-            {% endif %}
+                {% endif %}
             <span id="anchor" style="visibility: hidden;">Bottom of the form</span>
         </div>
     </div>
@@ -146,6 +163,15 @@
 
 <div id="bottomBanner" class="Banner"></div>
 <script>
+    function adjustFooter() {
+        var content = document.getElementById("FormContent")
+        console.log(content.scrollHeight)
+        var contentFactor = content.scrollHeight - 600;
+        var cf_str = "-" + contentFactor + "px"
+        var bottom = document.getElementById("bottomBanner")
+        bottom.style.bottom = cf_str
+    }
+
     function addBiller() {
         var current_biller = document.getElementsByClassName('biller').length;
         var elem = document.querySelector('#biller1');
@@ -180,6 +206,7 @@
             }
             anchor.before(copy);
         }
+        adjustFooter();
     }
 
     function deleteBiller() {
@@ -190,8 +217,9 @@
         } else {
             target.remove();
         }
+        adjustFooter();
     }
-
 </script>
+<script type="text/javascript" src="../static/js/controller.js"></script>
 </body>
 </html>

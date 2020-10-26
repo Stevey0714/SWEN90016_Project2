@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/login.css') }}">
 </head>
 <body>
 <div id="topBanner" class="Banner">
@@ -18,7 +19,7 @@
         </ul>
     </div>
 </div>
-<div id="content">
+<div id="FormContent">
     <div class='textcontainer-C'>
         <form action="{{ url_for("user.login") }}" method="POST">
             {{ form.csrf_token }}
@@ -31,8 +32,8 @@
                 {% endif %}
             {% endwith %}
             <p>
-                {% if form.username.errors %}
-                    {% for error in form.username.errors %}
+                {% if form.email.errors %}
+                    {% for error in form.email.errors %}
                         <span style="color: red;">{{ error }}</span>
                     {% endfor %}<br>
                 {% endif %}
@@ -42,8 +43,8 @@
                     {% endfor %}<br>
                 {% endif %}
             <p>
-                {{ form.username.label }}
-                {{ form.username(size=32) }}
+                {{ form.email.label }}
+                {{ form.email(size=32) }}
             </p>
             <p>
                 {{ form.password.label }}
@@ -57,4 +58,5 @@
 </div>
 <div id="bottomBanner" class="Banner"></div>
 </body>
+<script type="text/javascript" src="../static/js/controller.js"></script>
 </html>

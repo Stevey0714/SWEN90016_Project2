@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" type="text/css" href="../static/css/styles.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/book.css') }}">
 </head>
 <body>
 <div id="topBanner" class="Banner">
@@ -18,46 +19,49 @@
         </ul>
     </div>
 </div>
-<div id="content">
-    <p style="max-width: 1200px; margin: 0 auto;">
-        {% with message = get_flashed_messages() %}
-            {% if message %}
-                {% for msg in message %}
-                    <p style="color: red;">{{ msg }}</p>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-    </p>
+<div id="FormContent">
+    <div class="bigTitle">Book a Appointment</div>
+    {% with message = get_flashed_messages() %}
+        {% if message %}
+            {% for msg in message %}
+                <p style="color: red; text-align: center;">{{ msg }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     <div id="appointment" class=textcontainer-C>
         <form action="{{ url_for("user.book") }}" method="POST">
-            <br><br>
-            <label for="servicetype">Service Type:</label>
-            <select name="servicetype" size=1/>
-                {% for service in services %}
-                    {% if service == expensive_service %}
-                        <option value="{{ service.name }}" selected="selected">{{ service.name }}</option>
-                    {% else %}
-                        <option value="{{ service.name }}">{{ service.name }}</option>
-                    {% endif %}
-                {% endfor %}
-            </select>
-            <br><br>
-            <label for="date">Select Date (DD/MM/YYYY):</label>
-            <input type="date" name="date" id="appointment_date" onchange="updateTime()" required/>
-            <br><br>
-            <label for="time">Select Time:</label>
-            <select name="time" id="appointment_time" size=1 required>
-                <option value="Nothing">Please selected a date</option>
-            </select>
-            <br><br>
-            <label for="location">Location:</label>
-            <input type="text" name="location" value="{{ user.address }}"required/>
-            <br><br>
-            <label for="optionalmessage">Optional Message:</label>
-            <input type="text" name="optionalmessage"/>
-            <br><br>
-            <button type='submit' class="button">Submit</button>
-
+            <div class="selectEnter">
+                <br><br>
+                <label for="servicetype">Service Type:</label>
+                <select name="servicetype" size=1/>
+                    {% for service in services %}
+                        {% if service == expensive_service %}
+                            <option value="{{ service.name }}" selected="selected">{{ service.name }}</option>
+                        {% else %}
+                            <option value="{{ service.name }}">{{ service.name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+                <br><br>
+                <label for="date">Select Date:</label>
+                <input type="date" name="date" id="appointment_date" onchange="updateTime()"
+                       style="border: 1px solid #ccc; border-radius: 4px; cursor: pointer; padding-left: 15px;padding-right: 10px; font-size: 22px;"
+                       required/>
+                <br><br>
+                <label for="time">Select Time:</label>
+                <select name="time" id="appointment_time" size=1 required>
+                    <option value="Nothing">Please Select Time</option>
+                </select>
+            </div>
+            <div class="selectEnter">
+                <label for="location">Location:</label>
+                <input type="text" name="location" required/>
+                <br><br>
+                <label for="optionalmessage">Optional Message:</label>
+                <input type="text" name="optionalmessage"/>
+                <br><br>
+                <input type="submit"></input>
+            </div>
         </form>
     </div>
 </div>
@@ -104,4 +108,5 @@
     }
 </script>
 </body>
+<script type="text/javascript" src="../static/js/controller.js"></script>
 </html>
