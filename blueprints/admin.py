@@ -6,6 +6,9 @@ from flask_login import login_user, login_required, current_user, logout_user
 from flask_mail import Message
 from app.decorators import permission_required, admin_required, user_required
 
+'''
+Admin and carer(future developments)'s pages
+'''
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -17,12 +20,13 @@ def admin_page():
     user = current_user
     return render_template("Admin.html", user=user)
 
+
 @admin_bp.route("/appointment_admin")
 @login_required
 @admin_required
 def appointment_admin():
-    # 从数据库拿所有的预约信息
     user = current_user
+    # get all appointments in order of incompleted, cancelled, and completed
     appointments = []
     appointments += Appointment.query.filter_by(status='Incompleted')
     appointments += Appointment.query.filter_by(status='Cancelled')
@@ -32,15 +36,16 @@ def appointment_admin():
     return render_template("Appointment_admin.html", appointmentList=appointments, users_info=users_info,
                            services=services, user=user)
 
+
 @admin_bp.route("/ServiceType", methods=["POST", "GET"])
 @login_required
 @admin_required
 def service_type():
-    # 从数据库拿所有的服务类型
     user = current_user
+    # get all services in the database
     services = Service.query.all()
-    # typeList = ["hair cut", "hair wash and dry", "hair color"]
     return render_template("ServiceType.html", user=user, services=services)
+
 
 @admin_bp.route("/AddService", methods=["POST", "GET"])
 @login_required

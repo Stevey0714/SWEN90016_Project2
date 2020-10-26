@@ -11,8 +11,13 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Content, Mail, To, From
 from threading import Thread
 
+'''
+User's pages 
+'''
+
 user_bp = Blueprint('user', __name__, url_prefix='', static_folder='../static')
 sg = SendGridAPIClient(Config.MAIL_PASSWORD)
+
 
 @user_bp.route('/')
 @user_bp.route('/welcome')
@@ -30,6 +35,9 @@ def register():
         if not form.validate_username(form.username):
             flash('Username has been registered, please choose another name.')
             return redirect(url_for('user.register'))
+        if not form.validate_email(form.email):
+            flash('Email has been registered, please choose another one.')
+            return redirect(url_for('user.register'))
         register_user = User(name=str(form.username.data),
                              email=str(form.email.data),
                              contact=str(form.contactnumber.data),
@@ -39,6 +47,7 @@ def register():
         db.session.add(register_user)
         db.session.commit()
         flash('Register Successfully!')
+        # sending emails from verified email address
         sender = From('2371750502@qq.com')
         to = To(str(form.email.data))
         subject = "Welcome to Beauty Care!"
@@ -58,12 +67,12 @@ def register():
 @user_bp.route('/login', methods=['POST', 'GET'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('user.index'))
+        return redirect(url_for('user.appointment'))
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(name=form.username.data).first()
+        user = User.query.filter_by(email=form.email.data).first()
         if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password, please try again')
+            flash('Invalid email or password, please try again')
             return redirect(url_for('user.login'))
         login_user(user)
         next_page = request.args.get('next')
@@ -75,10 +84,12 @@ def login():
         return redirect(next_page)
     return render_template('login.html', title="Sign In", form=form)
 
+
 @user_bp.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('user.welcome'))
+
 
 @user_bp.route('/appointment')
 @login_required
@@ -243,7 +254,8 @@ def book():
 def booked():
     user = current_user
     admin = User.query.filter_by(role_id=3).first()
-    appointments = Appointment.query.filter_by(customer=user.ID, status='Incompleted').order_by(Appointment.date, Appointment.time).all()
+    appointments = Appointment.query.filter_by(customer=user.ID, status='Incompleted').order_by(Appointment.date,
+                                                                                                Appointment.time).all()
     service_name = {service.ID: service.name for service in Service.query.all()}
     if request.method == 'POST':
         app_ID = request.form.get('app_ID')
@@ -295,6 +307,9 @@ def viewaptmt(app_ID):
         if location == appointment.location and message == appointment.message:
             flash('Fail to modify the appointment, same information received')
             return redirect(url_for('user.viewaptmt', app_ID=app_ID))
+        elif location == '':
+            flash('You cannot remove the location of service!')
+            return redirect(url_for('user.viewaptmt', app_ID=app_ID))
         appointment.location = location
         appointment.message = message
         db.session.commit()
@@ -303,7 +318,7 @@ def viewaptmt(app_ID):
     return render_template('viewaptmt.html', user=user, appointment=appointment, service_name=service_name,
                            app_ID=app_ID)
 
-
+# generating dynamic urls for fixing url updating issues
 @user_bp.context_processor
 def context_processor():
     def dated_url_for(endpoint, **values):
@@ -314,4 +329,5 @@ def context_processor():
                                          endpoint, filename)
                 values['q'] = int(os.stat(file_path).st_mtime)
         return url_for(endpoint, **values)
+
     return dict(url_for=dated_url_for)
