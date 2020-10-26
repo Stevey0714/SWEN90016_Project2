@@ -14,12 +14,13 @@ table,th,tr{
     align: left;
     text-align: left;
     font-size: 20px;
-    padding:5px 20px;
+    padding:15px 20px;
     color:#555;
 }
 
 table{
     margin-bottom:20px;
+    border-radius: 5px;
 }
 
 th{
@@ -28,7 +29,7 @@ th{
     width:50px;
 }
 
-#TB_content{
+#FormContent{
     min-height: 100%;
     padding-top: 200px;
     margin-top: 10px;
@@ -44,4 +45,8 @@ th{
     color: red;
     align-content: center;
     margin: 10px;
+}
+
+.bigTitle{
+    padding-top: 40px;
 }
